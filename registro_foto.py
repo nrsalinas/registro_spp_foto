@@ -41,6 +41,7 @@ birds = listas.query('Aves.notna()').Aves.to_list()
 insects = listas.query('Insectos.notna()').Insectos.to_list()
 #animals = sorted(birds + insects)
 taxa = sorted(birds + insects + plants)
+sex = ['Hembra', 'Macho', 'Indeterminado', 'Hermafrodita']
 observers = listas.query('Observadores.notna()').Observadores.to_list()
 sites = listas.query('Sitios.notna()').Sitios.to_list()
 
@@ -126,6 +127,11 @@ def submit():
 		row.append(st.session_state.sp1)
 	else:
 		row.append(st.session_state.sp1alt)
+
+	if st.session_state.sex:
+		row.append(st.session_state.sex)
+	else:
+		row.append("")
 		
 	row += [
 		st.session_state.lat,
@@ -200,6 +206,15 @@ with st.form(
 		help="Si el nombre científico de la especie no está en la lista de arriba, digitelo aquí. Verifique la ortografía en una base de datos apropiada (por ejemplo, GBIF).",
 	)
 
+	st.selectbox(
+		"Sexo", 
+		sex,
+		index=None, 
+		key="sex",
+		placeholder='Sexo del individuo',
+		help="Sexo del individuo a registrar.",
+	)
+
 	st.number_input(
 		"Latitud", 
 		key="lat",
@@ -264,6 +279,9 @@ else:
 
 		elif st.session_state.sp1alt:
 			st.write(f"Especie: '{st.session_state.sp1alt}'")
+
+		if st.session_state.sex:
+			st.write(f"Sexo: '{st.session_state.sex}'")
 
 		if st.session_state.lat:
 			st.write(f"Latitud: '{st.session_state.lat}'")
